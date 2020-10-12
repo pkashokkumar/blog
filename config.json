@@ -3,9 +3,7 @@
   "site_title": "Technical dreams and blogs",
   "site_description": "Technical blogs",
   "site_keywords": [
-    "kubernetes",
-    "helm",
-    "microk8s"
+    "kubernetes"
   ],
   "posts_per_page": 5,
   "twitter_account": "@kashoknair",
