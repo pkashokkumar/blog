@@ -3,3 +3,5 @@ tags:
     name: microk8s
   - slug: k8s
     name: k8s
+  - slug: helm
+    name: helm
