@@ -3,15 +3,9 @@
   "site_title": "Technical dreams and blogs",
   "site_description": "Technical blogs",
   "site_keywords": [
-    {
-      "keyword": "Next.js"
-    },
-    {
-      "keyword": "Netlify"
-    },
-    {
-      "keyword": "React"
-    }
+    "kubernetes",
+    "helm",
+    "microk8s"
   ],
   "posts_per_page": 5,
   "twitter_account": "@kashoknair",
