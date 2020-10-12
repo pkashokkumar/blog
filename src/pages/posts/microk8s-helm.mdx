@@ -1,0 +1,120 @@
+---
+slug: microk8s-helm
+title: Kubernetes for everyone with Microk8s and Helm
+date: 2020-07-15
+author: pkashokkumar
+tags:
+  - microk8s
+---
+I was looking around for a way to have a lightweight Kubernetes that I can run on my Mac and use it to deploy and test my hobby applications.
+
+My experience with using [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) in the past was not very pleasant primarily due to the need to install an additional hypervisor like Virtual Box.
+
+I found the solution in [microk8s](https://microk8s.io/) which allows you to quickly setup and run a lean single node Kubernetes cluster on your laptop. This coupled with the [Helm](https://helm.sh/) package manager lets you easily deploy your applications into your Kubernetes cluster on the laptop that you can carry with you.
+
+Following are the steps to have this setup on a Mac using the [Homebrew](https://brew.sh/) package manager:
+
+Install kubectl, the kubernetes cli
+
+```
+$ brew install kubernetes-cli
+```
+
+microK8s is a [snap](https://snapcraft.io/) package and is supported only on Linux.
+
+This is where [multipass](https://multipass.run/) comes in handy. It can leverage the existing docker hyperkit hypervisor on mac to spin up Ubuntu instances quickly.
+
+Install multipass:
+
+```
+$ brew cask install multipass
+```
+
+Launch an Ubuntu instance using multipass:
+
+```
+$ multipass launch --name microk8s-vm --mem 4G --disk 40G
+```
+
+Enter the VM instance
+
+```
+$ multipass shell microk8s-vm
+```
+
+Install the microk8s snap
+
+```
+$ sudo snap install microk8s --classic
+```
+
+Check the status
+
+```
+$ sudo microk8s.status --wait-ready
+```
+
+Turn on the standard Kubernetes services
+
+```
+$ sudo microk8s.enable dns dashboard registry
+```
+
+Get kubeconfig from the instance
+
+```
+$ sudo microk8s.config
+```
+
+Copy the output to ~/.kube/config file on your mac so that kubectl uses that as the default configuration
+
+View the cluster info from your laptop
+
+```
+$ kubectl cluster-info 
+
+Kubernetes master is running at https://192.168.64.3:16443 
+Heapster is running at https://192.168.64.3:16443/api/v1/namespaces/kube-system/services/heapster/proxy
+...
+```
+
+You now have kubectl pointing to the microk8s single node kubernetes cluster running on your laptop and are setup to deploy applications on it.
+
+Let’s install nginx webserver that is hosted as a helm chart in a bitnami repo.
+
+Install Helm on mac
+
+```
+$ brew install helm
+```
+
+Add the bitnami repo
+
+```
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+Install nginx
+
+```
+$ helm install mywebserver bitnami/nginx
+```
+
+Verify nginx service is running in your kubernetes cluster
+
+```
+$ kubectl get svc mywebserver-nginx 
+
+NAME               CLUSTER-IP       PORT(S) 
+mywebserver-nginx  10.152.183.186   80:31743/TCP,443:32001/TCP
+```
+
+From your web browser, browse to [http://<node-ip&gt](http://<node-ip&gt);:port
+
+e.g, <http://192.168.64.3:31743>, you should see the following nginx Welcome page
+
+
+
+![Image for post](https://miro.medium.com/max/730/0*9nOggB7UEQSmPR0W)
+
+Congratulations! You deployed nginx in your microk8s kubernetes cluster on a laptop using the Helm package manager and can have it on the go with you!
