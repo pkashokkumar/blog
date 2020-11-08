@@ -15,7 +15,7 @@ import { getAuthor } from "../lib/authors";
 import { getTag } from "../lib/tags";
 
 
-export class Comments extends Component {
+class Comments extends Component {
 
   componentDidMount () {
       let script = document.createElement("script");
