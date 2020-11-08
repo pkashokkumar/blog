@@ -7,7 +7,7 @@ export default class Comments extends Component {
       let anchor = document.getElementById("inject-comments-for-uterances");
       script.setAttribute("src", "https://utteranc.es/client.js");
       script.setAttribute("crossorigin","anonymous");
-      script.setAttribute("async", true);
+      script.setAttribute("async", "true");
       script.setAttribute("repo", "pkashokkumar/blog-comments");
       script.setAttribute("issue-term", "pathname");
       script.setAttribute( "theme", "github-light");
