@@ -9,6 +9,7 @@ import BasicMeta from "../components/meta/BasicMeta";
 import JsonLdMeta from "../components/meta/JsonLdMeta";
 import OpenGraphMeta from "../components/meta/OpenGraphMeta";
 import TwitterCardMeta from "../components/meta/TwitterCardMeta";
+import { Comments } from "../components/Comments";
 import { SocialList } from "../components/SocialList";
 import TagButton from "../components/TagButton";
 import { getAuthor } from "../lib/authors";
@@ -73,6 +74,7 @@ export default function Index({
               </div>
             </header>
             <div className={styles.content}>{content}</div>
+            <div className={styles.content}><Comments/></div>
             <ul className={"tag-list"}>
               {tags.map((it, i) => (
                 <li key={i}>
