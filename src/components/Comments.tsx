@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-export default class Comments extends Component {
+export class Comments extends Component {
 
   componentDidMount () {
       let script = document.createElement("script");
