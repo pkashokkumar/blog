@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, {Component} from "react";
+import React from "react";
 import styles from "../../public/styles/content.module.css";
 import Author from "../components/Author";
 import Copyright from "../components/Copyright";
@@ -10,31 +10,10 @@ import JsonLdMeta from "../components/meta/JsonLdMeta";
 import OpenGraphMeta from "../components/meta/OpenGraphMeta";
 import TwitterCardMeta from "../components/meta/TwitterCardMeta";
 import { SocialList } from "../components/SocialList";
+import { Comments  } from "../components/Comments";
 import TagButton from "../components/TagButton";
 import { getAuthor } from "../lib/authors";
 import { getTag } from "../lib/tags";
-
-
-class Comments extends Component {
-
-  componentDidMount () {
-      let script = document.createElement("script");
-      let anchor = document.getElementById("inject-comments-for-uterances");
-      script.setAttribute("src", "https://utteranc.es/client.js");
-      script.setAttribute("crossorigin","anonymous");
-      script.setAttribute("async", "true");
-      script.setAttribute("repo", "pkashokkumar/blog-comments");
-      script.setAttribute("issue-term", "pathname");
-      script.setAttribute( "theme", "github-light");
-      anchor.appendChild(script);
-  }
-
-  render() {
-    return (
-        <div id="inject-comments-for-uterances"></div>
-    );
-  }
-}
 
 type Props = {
   title: string;
