@@ -2,7 +2,13 @@
   "base_url": "https://www.techdreams.site",
   "site_title": "Technical dreams and blogs",
   "site_description": "Technical blogs",
-  "site_keywords": [],
+  "site_keywords": [
+    "k8s",
+    "helm",
+    "spring",
+    "security",
+    "cloud"
+  ],
   "posts_per_page": 5,
   "twitter_account": "@kashoknair",
   "github_account": "pkashokkumar"
