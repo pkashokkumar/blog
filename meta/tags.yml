@@ -7,5 +7,7 @@ tags:
     name: helm
   - name: spring
     slug: spring
-  - name: security
+  - name: csrf
     slug: csrf
+  - slug: security
+    name: security
