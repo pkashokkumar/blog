@@ -1,0 +1,107 @@
+---
+slug: spring-security-csrf
+title: "Spring Security: Fixing Invalid CSRF Token in POST request"
+date: 2020-11-16
+author: ashokblog
+tags:
+  - spring
+  - csrf
+  - security
+---
+Chances are you developed a Spring REST service and everything was functioning smoothly till you enabled Spring Security to add authentication to your API endpoints.
+
+While the GET API continues to work, the PUT, POST and DELETE APIs stops working with HTTP 403 Forbidden error.
+
+<br />
+
+First step to debugging authentication and authorization issues with Spring is to enable debug logging for Spring security.
+
+Specify the following in your application.yaml:
+
+```
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+```
+
+\
+Build and rerun the application and you will see the following error message in the logs/console:
+
+```
+o.s.security.web.csrf.CsrfFilter        : Invalid CSRF token found for [http://<your api path>]
+o.s.s.w.access.AccessDeniedHandlerImpl  : Responding with 403 status code
+```
+
+So the reason turns out to be Invalid CSRF token in the request, but what is a CSRF token?   
+
+<br />
+
+<br />
+
+**CSRF** stands for Cross Site Request Forgery.
+
+From [](http://owasp.org)[owasp.og](https://owasp.org/www-community/attacks/csrf), Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated.
+
+For an example attack and details on how Spring addresses it, see [this](https://docs.spring.io/spring-security/site/docs/3.2.0.CI-SNAPSHOT/reference/html/csrf.html).  
+
+<br />
+
+Basically, when you enable Spring security, you get a session based authentication mechanism by default.
+
+The server sends a JSESSIONID cookie and the subsequent browser requests use the same session without requiring re-authentication.
+
+To prevent against CSRF attacks, after successful login, the server application is requried to generate and provide a random token called csrf token to the browser/client in the response metadata.
+
+The client is expected to pass this csrf token in any subsequent reqeusts like POST that updates the state on the server.
+
+<br />
+
+Coming back to our REST service, if we are building it as an API service that is usually not processed by users in browsers, it's safe to make the server stateless and disable CSRF protection.
+
+The API clients will be required to send in credentials along with each and every request it makes to the service.
+
+<br />
+
+When using Spring security with Java configuration, we need to extend WebSecurityConfigurerAdapter and set the Stateless session creation policy and disable CSRF protection.
+
+Add the following class to your application:
+
+```
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig extends
+    WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity)
+          throws Exception {
+
+        httpSecurity
+                // Disable csrf protection
+                .csrf().disable()
+
+                // don't create session
+                .sessionManagement()
+                  .sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS).and()
+
+                .authorizeRequests()
+
+                .antMatchers(
+                        HttpMethod.OPTIONS
+                ).permitAll()
+                .anyRequest().authenticated()
+                .and().httpBasic();;
+
+        // disable page caching
+        httpSecurity.headers().cacheControl().disable();
+    }
+}
+```
+
+<br />
+
+Now all your endpoints are secured and running fine with Spring security!
