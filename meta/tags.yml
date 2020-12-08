@@ -5,3 +5,9 @@ tags:
     name: k8s
   - slug: helm
     name: helm
+  - name: spring
+    slug: spring
+  - name: security
+    slug: csrf
+  - slug: csrf
+    name: csrf
