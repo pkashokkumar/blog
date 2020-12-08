@@ -9,5 +9,3 @@ tags:
     slug: spring
   - name: security
     slug: csrf
-  - slug: csrf
-    name: csrf
